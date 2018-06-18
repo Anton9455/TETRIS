@@ -9,5 +9,23 @@ div{
     display: block;
     margin: auto;
     width: 550px;
-    height: 800px;
+    height: 570px;
+}
+div #tetris{
+    box-shadow: -5px 5px 10px 0 #4b4a45;
+}
+input{
+    display: block;
+    margin: auto;
+    background-color: #50c878;
+    width:225px;
+    height: 40px;
+    border-radius: 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+input:hover{
+    color: #000000;
+    box-shadow: -3px 3px 5px 0 #4b4a45;
 }

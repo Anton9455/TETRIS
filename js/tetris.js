@@ -70,7 +70,7 @@ function createElement(type){
 }
 
 
-var i_item = new Element(createElement('I'));
+var i_item = new Element(createElement('S'));
 i_item.drawElement('red', {
         x: 0.5,
         y: 0.5
