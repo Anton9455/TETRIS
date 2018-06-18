@@ -3,6 +3,7 @@ const tetris = document.getElementById('tetris');
 const tetris_context = tetris.getContext('2d');
 tetris_context.fillStyle = '#194885';
 tetris_context.fillRect(0, 0, tetris.width, tetris.height);
+tetris_context.scale(20, 20);
 
 /* Menu contols*/
 const menu = document.getElementById('menu');
@@ -22,7 +23,7 @@ class Element {
 }
 
 
-
+/* Patterns elements */
 function createElement(type){
     switch(type){
         case 'I': return [
@@ -69,7 +70,7 @@ function createElement(type){
 }
 
 
-var i_item = new Element(createElement('L'));
+var i_item = new Element(createElement('I'));
 i_item.drawElement('red', {
         x: 0.5,
         y: 0.5
