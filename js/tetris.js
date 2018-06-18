@@ -16,7 +16,7 @@ class Element {
         this.matrix = matrix;
     }
     get_I(position, color, offset, orientation) {
-        arrayOperation(this.matrix, position, color, offset, orientation)
+        arrayOperation_I(this.matrix, position, color, offset, orientation)
     }
 }
 
@@ -26,14 +26,15 @@ const matrix = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
 ];
+
 var i_item = new Element(matrix);
 i_item.get_I(4, 'red', {
-             x: 0.5,
-             y: 0.5
-            },
-             true);
+        x: 0.5,
+        y: 0.5
+    },
+    true);
 
-function arrayOperation(matrix, position, color, offset, orientation) {
+function arrayOperation_I(matrix, position, color, offset, orientation) {
     if (orientation == true) {
         for (var i = 0; i < matrix.length; i++) {
             for (var j = 0; j < matrix[i].length; j++) {
