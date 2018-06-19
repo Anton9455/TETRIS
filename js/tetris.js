@@ -143,7 +143,7 @@ function draw() {
 
 function update() {
     draw();
-    if(tetramino.offset.y != 24) tetramino.offset.y++; //test
+    if(tetramino.offset.y != 24) tetramino.offset.y++; // 24 this is test
     var timerId = setTimeout(update, 1000);
 }
 
