@@ -59,7 +59,6 @@ function createElement(type) {
         case 'S':
             return [
                 [0, 1, 1, 0],
-                [0, 1, 0, 0],
                 [1, 1, 0, 0],
             ];
             break;
@@ -111,8 +110,7 @@ function arrayOperation(matrix, color, offset) {
         for (var j = 0; j < matrix[i].length; j++) {
             if (matrix[i][j] == 1) {
                 menu_context.fillStyle = color;
-                menu_context.strokeStyle = 'yelloy';//test
-                menu_context.lineWidth = 0.1;//test
+                menu_context.lineWidth = 0.1;
                 menu_context.fillRect(i + offset.x,
                     j + offset.y,
                     1, 1);
