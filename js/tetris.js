@@ -127,8 +127,11 @@ function twistElement(matrix) {
 
 const tetramino = {
     type: 'Z',
-    color:'white',
-    offset: {x:0.5, y:3},
+    color: 'white',
+    offset: {
+        x: 0.5,
+        y: 3
+    },
     context: tetris_context
 };
 
@@ -137,13 +140,13 @@ function draw() {
     tetris_context.fillRect(0, 0, tetris.width, tetris.height);
 
     let item = new Element(createElement(tetramino.type));
-    item.drawElementArea(tetramino.color,tetramino.offset,tetramino.context);
+    item.drawElementArea(tetramino.color, tetramino.offset, tetramino.context);
 }
 
 
 function update() {
     draw();
-    if(tetramino.offset.y != 24) tetramino.offset.y++; // 24 this is test
+    if (tetramino.offset.y != 24) tetramino.offset.y++; // 24 this is test
     var timerId = setTimeout(update, 1000);
 }
 
