@@ -10,11 +10,12 @@
 <body>
     <h1>Tetris</h1>
     <div>
+        <h3 id="score">0</h3>
         <canvas id="tetris" width="400px" height="550px"></canvas>
         <canvas id="menu" width="100px" height="550px"></canvas>
     </div>
     <div>
-        <input type="button" value="Start">
+        <input type="button" onclick="start()" value="Start">
     </div>
     <script src="js/tetris.js"></script>
 </body>

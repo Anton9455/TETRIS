@@ -17,8 +17,11 @@ class Element {
     constructor(matrix) {
         this.matrix = matrix;
     }
-    drawElement(color, offset) {
-        arrayOperation(this.matrix, color, offset)
+    drawElementMenu(color, offset, context) {
+        arrayOperation(this.matrix, color, offset, context)
+    }
+    drawElementArea(color, offset, context) {
+        arrayOperation(this.matrix, color, offset, context)
     }
 }
 
@@ -81,43 +84,69 @@ function createElement(type) {
     }
 }
 
-var arrayEl = ['S', 'Z', 'T', 'I', 'L', 'O', 'J']; //test array
+/*show menu items*/
+var arrayEl = ['S', 'Z', 'T', 'I', 'L', 'O', 'J'];
 var count = 0.3;
 for (z in arrayEl) {
     let item = new Element(createElement(arrayEl[z]));
-    item.drawElement('red', {
+    item.drawElementMenu('red', {
         x: 0.5,
         y: count
-    });
+    }, menu_context);
     count += 4;
 }
 
-/* var i_item = new Element(createElement('S'));
-i_item.drawElement('red', {
-    x: 0.5,
-    y: 0.5
-});
-
-var j_item = new Element(createElement('T'));
-j_item.drawElement('red', {
-    x: 0.5,
-    y: 5
-}); */
-
-function arrayOperation(matrix, color, offset) {
+function arrayOperation(matrix, color, offset, context) {
 
     for (var i = 0; i < matrix.length; i++) {
         for (var j = 0; j < matrix[i].length; j++) {
             if (matrix[i][j] == 1) {
-                menu_context.fillStyle = color;
-                menu_context.lineWidth = 0.1;
-                menu_context.fillRect(i + offset.x,
+                context.fillStyle = color;
+                context.lineWidth = 0.1;
+                context.fillRect(i + offset.x,
                     j + offset.y,
                     1, 1);
-                menu_context.strokeRect(i + offset.x,
+                context.strokeRect(i + offset.x,
                     j + offset.y,
                     1, 1)
             }
         }
     }
+}
+
+function twistElement(matrix) {
+    for (var i = 0; i < matrix.length; i++) {
+        for (var j = 0; j < matrix[i].length; j++) {
+            if (matrix[i][j] == 1) {
+                matrix[j][i] = 1;
+                matrix[i][j] = 0;
+            }
+        }
+    }
+}
+
+const tetramino = {
+    type: 'Z',
+    color:'white',
+    offset: {x:0.5, y:3},
+    context: tetris_context
+};
+
+function draw() {
+    tetris_context.fillStyle = '#194885';
+    tetris_context.fillRect(0, 0, tetris.width, tetris.height);
+
+    let item = new Element(createElement(tetramino.type));
+    item.drawElementArea(tetramino.color,tetramino.offset,tetramino.context);
+}
+
+
+function update() {
+    draw();
+    if(tetramino.offset.y != 24) tetramino.offset.y++; //test
+    var timerId = setTimeout(update, 1000);
+}
+
+function start() {
+    update();
 }

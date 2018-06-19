@@ -5,11 +5,24 @@ h1{
     margin: 0;
     padding: 0;
 }
+#score{
+    display: inline-block;
+    padding:0;
+    margin: 0;
+    width: 100px;
+    height: 25px;
+    margin-right: 30px;
+    border: #000000 2px solid;
+    vertical-align: top;
+    border-radius: 10px;
+    box-shadow: -1px 1px 3px 0 #4b4a45;
+    text-align: center;
+}
 div{
     display: block;
     margin: auto;
-    width: 550px;
-    height: 570px;
+    width: 650px;
+    height: 600px;
 }
 div #tetris{
     box-shadow: -5px 5px 10px 0 #4b4a45;
