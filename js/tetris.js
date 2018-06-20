@@ -183,7 +183,10 @@ document.addEventListener("keydown", function (event) {
             break;
         case (40):
         case (83):
-            tetramino.offset.y++;
+            tetramino.offset.y += 3;
+            break;
+        case (13):
+            start();
             break;
         default:
             null;
