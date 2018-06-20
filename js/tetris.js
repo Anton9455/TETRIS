@@ -147,9 +147,23 @@ function draw() {
 function update() {
     draw();
     if (tetramino.offset.y != 24) tetramino.offset.y++; // 24 this is test
-    var timerId = setTimeout(update, 1000);
+    var timerId = setTimeout(update, 500);
 }
 
 function start() {
     update();
 }
+
+/*Controls*/
+document.addEventListener("keydown", function(event){
+    switch(event.keyCode){
+        case (37 || 65): tetramino.offset.x--;
+        break;
+        case (39 || 68): tetramino.offset.x++;
+        break;
+        case (40 || 83): tetramino.offset.y++;
+        break;
+        default: null;
+        break;
+    }
+})
