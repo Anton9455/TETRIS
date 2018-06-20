@@ -67,43 +67,43 @@ function createElement(type) {
             break;
         case 'T':
             return [
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [1, 1, 1, 0],
-                [0, 1, 0, 0],
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 0],
             ];
             break;
         case 'L':
             return [
-                [0, 1, 0, 0],
-                [0, 1, 0, 0],
-                [0, 1, 1, 0],
+                [0, 1, 0],
+                [0, 1, 0],
+                [0, 1, 1],
             ];
             break;
         case 'J':
             return [
-                [0, 1, 0, 0],
-                [0, 1, 0, 0],
-                [1, 1, 0, 0],
+                [0, 1, 0],
+                [0, 1, 0],
+                [1, 1, 0],
             ];
             break;
         case 'S':
             return [
-                [0, 1, 1, 0],
-                [1, 1, 0, 0],
+                [0, 1, 1],
+                [1, 1, 0],
+                [0, 0, 0],
             ];
             break;
         case 'Z':
             return [
-                [1, 1, 0, 0],
-                [0, 1, 1, 0],
-                [0, 0, 0, 0],
+                [1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 0],
             ];
             break;
         case 'O':
             return [
-                [1, 1, 0, 0],
-                [1, 1, 0, 0],
+                [1, 1],
+                [1, 1],
             ];
             break;
         default:
@@ -150,7 +150,7 @@ function draw() {
 
 function update() {
     draw();
-    if (tetramino.offset.y != 27) tetramino.offset.y++; // 24 this is test
+    if (tetramino.offset.y != 27) tetramino.offset.y++; // 27 this is test
     var timerId = setTimeout(update, 500);
 }
 
