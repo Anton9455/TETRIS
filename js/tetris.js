@@ -1,11 +1,13 @@
-/* Tetris controls*/
+/*Input
+ Tetris controls*/
 const tetris = document.getElementById('tetris');
 const tetris_context = tetris.getContext('2d');
 tetris_context.fillStyle = '#194885';
 tetris_context.fillRect(0, 0, tetris.width, tetris.height);
 tetris_context.scale(20, 20);
 
-/* Menu contols*/
+/*Input
+ Menu contols*/
 const menu = document.getElementById('menu');
 const menu_context = menu.getContext('2d');
 menu_context.lineWidth = 3.5;
@@ -25,6 +27,32 @@ class Element {
     }
 }
 
+/*Objects*/
+const tetramino = {
+    type: 'Z',
+    color: 'white',
+    offset: {
+        x: 0.5,
+        y: 3
+    },
+    context: tetris_context
+};
+const area = genArea(20, 30);
+
+/*show menu items*/
+function showMenu() {
+    var arrayEl = ['S', 'Z', 'T', 'I', 'L', 'O', 'J'];
+    var count = 0.3;
+    for (z in arrayEl) {
+        let item = new Element(createElement(arrayEl[z]));
+        item.drawElementMenu('red', {
+            x: 0.5,
+            y: count
+        }, menu_context);
+        count += 4;
+    }
+}
+showMenu();
 
 /* Patterns elements */
 function createElement(type) {
@@ -84,18 +112,6 @@ function createElement(type) {
     }
 }
 
-/*show menu items*/
-var arrayEl = ['S', 'Z', 'T', 'I', 'L', 'O', 'J'];
-var count = 0.3;
-for (z in arrayEl) {
-    let item = new Element(createElement(arrayEl[z]));
-    item.drawElementMenu('red', {
-        x: 0.5,
-        y: count
-    }, menu_context);
-    count += 4;
-}
-
 function arrayOperation(matrix, color, offset, context) {
 
     for (var i = 0; i < matrix.length; i++) {
@@ -125,28 +141,16 @@ function twistElement(matrix) {
     }
 }
 
-const tetramino = {
-    type: 'Z',
-    color: 'white',
-    offset: {
-        x: 0.5,
-        y: 3
-    },
-    context: tetris_context
-};
-
 function draw() {
     tetris_context.fillStyle = '#194885';
     tetris_context.fillRect(0, 0, tetris.width, tetris.height);
-
     let item = new Element(createElement(tetramino.type));
     item.drawElementArea(tetramino.color, tetramino.offset, tetramino.context);
 }
 
-
 function update() {
     draw();
-    if (tetramino.offset.y != 24) tetramino.offset.y++; // 24 this is test
+    if (tetramino.offset.y != 27) tetramino.offset.y++; // 24 this is test
     var timerId = setTimeout(update, 500);
 }
 
@@ -154,16 +158,35 @@ function start() {
     update();
 }
 
+function genArea(width, height) {
+    const area = [];
+    for (var i = 0; i < height; i++) {
+        area.push(new Array(width).fill(0));
+    }
+    return area;
+}
+
+function synthesis(area, tetramino) {
+
+}
+
 /*Controls*/
-document.addEventListener("keydown", function(event){
-    switch(event.keyCode){
-        case (37 || 65): tetramino.offset.x--;
-        break;
-        case (39 || 68): tetramino.offset.x++;
-        break;
-        case (40 || 83): tetramino.offset.y++;
-        break;
-        default: null;
-        break;
+document.addEventListener("keydown", function (event) {
+    switch (event.keyCode) {
+        case (37):
+        case (65):
+            tetramino.offset.x--;
+            break;
+        case (39):
+        case (68):
+            tetramino.offset.x++;
+            break;
+        case (40):
+        case (83):
+            tetramino.offset.y++;
+            break;
+        default:
+            null;
+            break;
     }
 })

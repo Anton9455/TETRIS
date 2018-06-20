@@ -30,6 +30,7 @@ div #tetris{
 input{
     display: block;
     margin: auto;
+    margin-top:15px;
     background-color: #50c878;
     width:225px;
     height: 40px;
