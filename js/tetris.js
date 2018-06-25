@@ -144,7 +144,7 @@ function arrayOperation(matrix, offset, context) {
     for (var i = 0; i < matrix.length; i++) {
         for (var j = 0; j < matrix[i].length; j++) {
             if (matrix[i][j]) {
-                context.fillStyle = colors[matrix[i][j]-1];
+                context.fillStyle = colors[--matrix[i][j]];
                 context.lineWidth = 0.1;
                 context.fillRect(i + offset.x,
                     j + offset.y,
@@ -194,7 +194,7 @@ function twistElement(matrix, pos) {
 function draw() {
     tetris_context.fillStyle = '#194885';
     tetris_context.fillRect(0, 0, tetris.width, tetris.height);
-    arrayOperation(area,{
+    arrayOperation(area, {
         x: 0,
         y: 0,
     }, tetramino.context);
@@ -210,6 +210,7 @@ function update() {
         tetramino.offset.y--;
         synthesis(area, tetramino);
         reset();
+        clearLine();
     }
     var timerId = setTimeout(update, 500);
 }
@@ -257,6 +258,18 @@ function tetraminoMove(pos) {
     }
 }
 
+function clearLine() {
+    outer: for (let y = area.length - 1; y > 0; --y) {
+        for (let x = 0; x < area[y].length; ++x) {
+            if (area[y][x] === 0) {
+                continue outer;
+            }
+        }
+        const row = area.splice(y,1)[0].fill(0);
+        area.unshift(row);
+    }
+}
+
 function reset() {
     var arrayEl = ['S', 'Z', 'T', 'I', 'L', 'O', 'J'];
     tetramino.matrix = createElement(arrayEl[arrayEl.length * Math.random() | 0]);
@@ -264,6 +277,8 @@ function reset() {
     tetramino.offset.x = (area[0].length / 2 | 0) - (tetramino.matrix[0].length / 2 | 0);
     if (encounter(area, tetramino)) {
         area.forEach(row => row.fill(0));
+        alert("Game over");
+        location.reload();
     }
 }
 
