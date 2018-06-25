@@ -19,26 +19,36 @@ class Element {
     constructor(matrix) {
         this.matrix = matrix;
     }
-    drawElementMenu(color, offset, context) {
-        arrayOperation(this.matrix, color, offset, context)
+    drawElementMenu(offset, context) {
+        arrayOperation(this.matrix, offset, context)
     }
-    drawElementArea(color, offset, context) {
-        arrayOperation(this.matrix, color, offset, context)
+    drawElementArea(offset, context) {
+        arrayOperation(this.matrix, offset, context)
     }
 }
 
 /*Objects*/
 const tetramino = {
-    type: 'Z',
-    color: 'white',
+    type: 'T',
     offset: {
         x: 1,
-        y: 3
+        y: 0
     },
+    matrix: createElement("T"),
     //twist:false, //test
     context: tetris_context
 };
 const area = genArea(20, 30);
+
+const colors = [
+    '#00f0f0',
+    '#ffffff',
+    '#f0a000',
+    '#f0f000',
+    '#00f000',
+    '#a000f0',
+    '#f00000',
+]
 
 /*show menu items*/
 function showMenu() {
@@ -46,7 +56,7 @@ function showMenu() {
     var count = 1;
     for (z in arrayEl) {
         let item = new Element(createElement(arrayEl[z]));
-        item.drawElementMenu('red', {
+        item.drawElementMenu({
             x: 1,
             y: count
         }, menu_context);
@@ -85,42 +95,42 @@ function createElement(type) {
         case 'T':
             return [
                 [0, 0, 0],
-                [1, 1, 1],
-                [0, 1, 0],
+                [2, 2, 2],
+                [0, 2, 0],
             ];
             break;
         case 'L':
             return [
-                [0, 1, 0],
-                [0, 1, 0],
-                [0, 1, 1],
+                [0, 3, 0],
+                [0, 3, 0],
+                [0, 3, 3],
             ];
             break;
         case 'J':
             return [
-                [0, 1, 0],
-                [0, 1, 0],
-                [1, 1, 0],
+                [0, 4, 0],
+                [0, 4, 0],
+                [4, 4, 0],
             ];
             break;
         case 'S':
             return [
-                [0, 1, 1],
-                [1, 1, 0],
+                [0, 5, 5],
+                [5, 5, 0],
                 [0, 0, 0],
             ];
             break;
         case 'Z':
             return [
-                [1, 1, 0],
-                [0, 1, 1],
+                [6, 6, 0],
+                [0, 6, 6],
                 [0, 0, 0],
             ];
             break;
         case 'O':
             return [
-                [1, 1],
-                [1, 1],
+                [7, 7],
+                [7, 7],
             ];
             break;
         default:
@@ -129,12 +139,12 @@ function createElement(type) {
     }
 }
 
-function arrayOperation(matrix, color, offset, context) {
+function arrayOperation(matrix, offset, context) {
     matrix = transpose(matrix);
     for (var i = 0; i < matrix.length; i++) {
         for (var j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j] == 1) {
-                context.fillStyle = color;
+            if (matrix[i][j]) {
+                context.fillStyle = colors[matrix[i][j]-1];
                 context.lineWidth = 0.1;
                 context.fillRect(i + offset.x,
                     j + offset.y,
@@ -147,33 +157,59 @@ function arrayOperation(matrix, color, offset, context) {
     }
 }
 
-function twistElement(matrix) {
-    for (var i = 0; i < matrix.length; i++) {
-        for (var j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j] == 1) {
-                matrix[j][i] = 1;
-                matrix[i][j] = 0;
-            }
+function twist(dir) {
+    const pos = tetramino.offset.x;
+    let offset = 1;
+    twistElement(tetramino.matrix, dir);
+    while (encounter(area, tetramino)) {
+        tetramino.offset.x += offset;
+        offset = -(offset + (offset > 0 ? 1 : -1));
+        if (offset > tetramino.matrix[0].length) {
+            twistElement(tetramino.matrix, -dir);
+            tetramino.offset.x = pos;
+            return;
         }
+    }
+}
+
+function twistElement(matrix, pos) {
+    for (var i = 0; i < matrix.length; ++i) {
+        for (var j = 0; j < i; ++j) {
+            [
+                matrix[j][i],
+                matrix[i][j]
+            ] = [
+                matrix[i][j],
+                matrix[j][i]
+            ];
+        }
+    }
+    if (pos > 0) {
+        matrix.forEach(row => row.reverse());
+    } else {
+        matrix.reverse();
     }
 }
 
 function draw() {
     tetris_context.fillStyle = '#194885';
     tetris_context.fillRect(0, 0, tetris.width, tetris.height);
-    let item = new Element(createElement(tetramino.type));
-    /* if(tetramino.twist) {//test
-        twistElement(item.matrix);
-        tetramino.twist = false;
-    }  */
-    item.drawElementArea(tetramino.color, tetramino.offset, tetramino.context);
-    synthesis(area, item.matrix, tetramino);
+    arrayOperation(area,{
+        x: 0,
+        y: 0,
+    }, tetramino.context);
+
+    let item = new Element(tetramino.matrix);
+    item.drawElementArea(tetramino.offset, tetramino.context);
 }
 
 function update() {
     draw();
-    if (tetramino.offset.y != 27) { // 27 this is test
-        tetramino.offset.y++;
+    tetramino.offset.y++;
+    if (encounter(area, tetramino)) {
+        tetramino.offset.y--;
+        synthesis(area, tetramino);
+        reset();
     }
     var timerId = setTimeout(update, 500);
 }
@@ -190,41 +226,70 @@ function genArea(width, height) {
     return area;
 }
 
-function synthesis(area, matrix, tetramino) {
-    for (var i = 0; i < matrix.length; i++) {
-        for (var j = 0; j < matrix.length; j++) {
-            if (matrix[i][j] != 0) {
-                area[i + (tetramino.offset.y)][j + (tetramino.offset.x)] = matrix[i][j];
+function synthesis(area, tetramino) {
+    for (var i = 0; i < tetramino.matrix.length; i++) {
+        for (var j = 0; j < tetramino.matrix.length; j++) {
+            if (tetramino.matrix[i][j] != 0) {
+                area[i + (tetramino.offset.y)][j + (tetramino.offset.x)] = tetramino.matrix[i][j];
             }
         }
     }
 }
 
-/*Controls*/
-/* document.addEventListener("keydown",function(event){
-    switch(event.keyCode){
-        case (103): tetramino.twist = true;
-        break;
-        default: null;
-        break;
+function encounter(area, tetramino) {
+    const [m, o] = [tetramino.matrix, tetramino.offset];
+    for (let y = 0; y < m.length; ++y) {
+        for (let x = 0; x < m[y].length; ++x) {
+            if (m[y][x] !== 0 &&
+                (area[y + o.y] &&
+                    area[y + o.y][x + o.x]) !== 0) {
+                return true;
+            }
+        }
     }
-}); */
+    return false;
+}
+
+function tetraminoMove(pos) {
+    tetramino.offset.x += pos;
+    if (encounter(area, tetramino)) {
+        tetramino.offset.x -= pos;
+    }
+}
+
+function reset() {
+    var arrayEl = ['S', 'Z', 'T', 'I', 'L', 'O', 'J'];
+    tetramino.matrix = createElement(arrayEl[arrayEl.length * Math.random() | 0]);
+    tetramino.offset.y = 0;
+    tetramino.offset.x = (area[0].length / 2 | 0) - (tetramino.matrix[0].length / 2 | 0);
+    if (encounter(area, tetramino)) {
+        area.forEach(row => row.fill(0));
+    }
+}
+
+/*Controls*/
 document.addEventListener("keydown", function (event) {
     switch (event.keyCode) {
         case (37):
         case (65):
-            tetramino.offset.x--;
+            tetraminoMove(-1);
             break;
         case (39):
         case (68):
-            tetramino.offset.x++;
+            tetraminoMove(1);
             break;
         case (40):
         case (83):
-            tetramino.offset.y += 3;
+            update();
             break;
         case (13):
             start();
+            break;
+        case (107):
+            twist(1);
+            break;
+        case (109):
+            twist(-1);
             break;
         default:
             null;
