@@ -29,12 +29,12 @@ class Element {
 
 /*Objects*/
 const tetramino = {
-    type: 'T',
     offset: {
         x: 1,
         y: 0
     },
     matrix: createElement("T"),
+    score:0,
     //twist:false, //test
     context: tetris_context
 };
@@ -211,6 +211,7 @@ function update() {
         synthesis(area, tetramino);
         reset();
         clearLine();
+        updateScore();
     }
     var timerId = setTimeout(update, 500);
 }
@@ -267,7 +268,12 @@ function clearLine() {
         }
         const row = area.splice(y,1)[0].fill(0);
         area.unshift(row);
+        tetramino.score +=10;
     }
+    
+}
+function updateScore(){
+    document.getElementById('score').innerText = tetramino.score;
 }
 
 function reset() {
