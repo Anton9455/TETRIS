@@ -30,7 +30,7 @@ class Element {
 /*Objects*/
 const tetramino = {
     offset: {
-        x: 1,
+        x: 0,
         y: 0
     },
     matrix: createElement("T"),
@@ -217,6 +217,7 @@ function update() {
 }
 
 function start() {
+    document.getElementById('rules').style.display = "none";
     update();
 }
 

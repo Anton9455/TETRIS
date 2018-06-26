@@ -8,6 +8,18 @@ h1{
     margin: 0;
     padding: 0;
 }
+#rules{
+    position: fixed;
+    left: 30px;
+    bottom: 30px;;
+    width: 500px;
+    height: 150px;
+    background: url(../img/keyboard.png) no-repeat;
+    background-size: 500px 150px;
+    border-radius: 10px;
+    border: 2px solid #4b4a45;
+    box-shadow: -3px 3px 3px 0 #4b4a45;
+}
 #score{
     display: inline-block;
     padding:0;
